@@ -90,49 +90,49 @@
     </main>
 
     <script>
-  // 配置你想要的文字 + 图案
-  const fullText = "▌未来至上▌";
+  // 你的标题文字
+  const fullText = "<<未来至上>>";
   let index = 0;
   let currentTitle = "";
   let isDeleting = false;
 
-
   function dynamicTitle() {
-    // 核心打字逻辑
-    const i = index % fullText.length;
-    
+    // 计算当前应该显示的文字
     if (!isDeleting) {
-      // 打字中
-      currentTitle = fullText.substring(0, i + 1);
+      // 打字：逐个增加
+      currentTitle = fullText.substring(0, index + 1);
     } else {
-      // 删字中
-      currentTitle = fullText.substring(0, i - 1);
+      // 删字：逐个减少
+      currentTitle = fullText.substring(0, index);
     }
 
-
-    // 设置到网页标题
+    // 更新网页标题
     document.title = currentTitle;
 
+    // 打字 / 删字 速度
+    let speed = isDeleting ? 70 : 120;
 
-    // 控制打字/删字速度
-    let speed = isDeleting ? 80 : 120;
-
-
-    // 完整打完后停顿，再开始删除
-    if (!isDeleting && i === fullText.length - 1) {
-      speed = 1200; // 停顿时间
+    if (!isDeleting && index === fullText.length) {
+      // 文字打完了 → 停顿 → 开始删除
+      speed = 1200;
       isDeleting = true;
-    }
-    // 删完后重新开始
-    else if (isDeleting && i === 0) {
+    } else if (isDeleting && index === 0) {
+      // 文字删光了 → 重新开始打字
       isDeleting = false;
     }
 
+    // 控制索引
+    if (!isDeleting) {
+      index++;
+    } else {
+      index--;
+    }
 
-    index++;
     setTimeout(dynamicTitle, speed);
   }
 
+  // 启动
+  dynamicTitle();
 
   // 启动
   dynamicTitle();
