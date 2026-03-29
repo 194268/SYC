@@ -1,65 +1,169 @@
-:root {
-    --black: #000000;
-    --white: #ffffff;
-    --gray: #1a1a1a;
-    --light-gray: #444444;
-}
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TERMINAL // FUTURE_TECH</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=Fira+Code&display=swap" rel="stylesheet">
+    <style>
+        /* --- 核心样式 (整合自之前版本) --- */
+        :root {
+            --bg-black: #000000;
+            --card-gray: rgba(12, 12, 12, 0.7);
+            --border-dim: rgba(255, 255, 255, 0.1);
+            --border-bright: rgba(255, 255, 255, 0.8);
+            --text-main: #ffffff;
+            --text-dim: #666666;
+        }
 
-body {
-    background: var(--black);
-    color: var(--white);
-    font-family: 'Inter', sans-serif;
-    margin: 0;
-    overflow-x: hidden;
-}
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: var(--bg-black); color: var(--text-main); font-family: 'Inter', sans-serif; overflow-x: hidden; }
 
-canvas { position: fixed; top: 0; z-index: -1; }
+        /* 背景画布 */
+        #hero-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; }
 
-.container { max-width: 1000px; margin: 0 auto; padding: 100px 20px; }
+        /* 导航栏 */
+        .glass-nav {
+            position: fixed; top: 0; width: 100%; height: 70px;
+            border-bottom: 1px solid var(--border-dim);
+            backdrop-filter: blur(20px); z-index: 1000;
+        }
+        .nav-inner {
+            max-width: 1100px; margin: 0 auto; height: 100%;
+            display: flex; justify-content: space-between; align-items: center; padding: 0 24px;
+        }
+        .logo { font-weight: 700; letter-spacing: 4px; font-size: 14px; }
+        .links a { color: var(--text-dim); text-decoration: none; font-size: 12px; margin-left: 25px; transition: 0.3s; }
+        .links a:hover { color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.5); }
 
-/* 导航 */
-.glass-nav {
-    position: fixed; top: 0; width: 100%; height: 60px;
-    border-bottom: 1px solid var(--light-gray);
-    backdrop-filter: blur(20px); z-index: 100;
-}
-.nav-inner {
-    max-width: 1000px; margin: 0 auto; height: 100%;
-    display: flex; justify-content: space-between; align-items: center; padding: 0 20px;
-}
-.logo { font-weight: 700; letter-spacing: 2px; }
+        /* 主体布局 */
+        .container { max-width: 1100px; margin: 0 auto; padding: 140px 24px 80px; }
+        .hero-section { margin-bottom: 80px; }
+        .glitch-text { font-size: clamp(40px, 8vw, 72px); font-weight: 700; letter-spacing: -3px; margin-bottom: 10px; }
+        .subtitle { font-family: 'Fira Code'; color: var(--text-dim); font-size: 13px; border-left: 2px solid #fff; padding-left: 15px; }
 
-/* 英雄区 */
-.hero-section { margin-bottom: 80px; }
-.glitch-text {
-    font-size: 60px; font-weight: 700;
-    position: relative;
-}
-.subtitle { color: var(--light-gray); font-family: 'Fira Code', monospace; font-size: 14px; }
+        /* 文章网格 */
+        .post-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px; }
+        .post-card {
+            background: var(--card-gray); border: 1px solid var(--border-dim);
+            padding: 40px; position: relative; transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            opacity: 0; transform: translateY(30px); animation: fadeInUp 0.8s forwards;
+        }
+        .post-card:hover {
+            border-color: var(--border-bright); background: rgba(20, 20, 20, 0.9);
+            transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+        .card-tag { font-family: 'Fira Code'; font-size: 10px; color: var(--text-dim); margin-bottom: 20px; }
+        .post-card h2 { font-size: 24px; font-weight: 600; margin-bottom: 15px; line-height: 1.2; }
+        .line-divider { width: 40px; height: 1px; background: var(--text-dim); margin: 25px 0; transition: 0.6s; }
+        .post-card:hover .line-divider { width: 100%; background: #fff; }
+        .enter-link { font-family: 'Fira Code'; font-size: 11px; color: #fff; text-decoration: none; letter-spacing: 1px; opacity: 0.5; }
+        .post-card:hover .enter-link { opacity: 1; }
 
-/* 卡片列表 */
-.post-grid {
-    display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px;
-}
-.post-card {
-    background: var(--gray);
-    border: 1px solid var(--light-gray);
-    padding: 30px;
-    transition: all 0.3s ease;
-}
-.post-card:hover {
-    border-color: var(--white);
-    transform: translateY(-5px);
-    box-shadow: 0 10px 30px rgba(255,255,255,0.05);
-}
-.card-tag { font-size: 10px; color: var(--light-gray); margin-bottom: 10px; }
-.enter-link {
-    display: inline-block; margin-top: 20px; color: var(--white);
-    font-family: 'Fira Code', monospace; font-size: 12px;
-}
+        @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
+        
+        .loading { font-family: 'Fira Code'; color: var(--text-dim); grid-column: 1/-1; text-align: center; padding: 50px; }
+    </style>
+</head>
+<body>
+    <canvas id="hero-canvas"></canvas>
+    
+    <nav class="glass-nav">
+        <div class="nav-inner">
+            <span class="logo">SOURCE_CODE //</span>
+            <div class="links">
+                <a href="#">ARCHIVE</a>
+                <a href="https://github.com/194268/SYC" target="_blank">GITHUB</a>
+            </div>
+        </div>
+    </nav>
 
-/* 文章内容排版 */
-.article-content { max-width: 700px; margin: 80px auto; padding: 20px; }
-.markdown-body h1, .markdown-body h2 { border-bottom: 1px solid var(--light-gray); padding-bottom: 10px; margin-top: 40px; }
-.markdown-body p { line-height: 1.8; color: #ccc; }
-.markdown-body code { font-family: 'Fira Code'; background: #222; padding: 2px 5px; }
+    <main class="container">
+        <header class="hero-section">
+            <h1 class="glitch-text">EVOLVING_LOGIC</h1>
+            <p class="subtitle">// 自动化技术分享仓 / 极简黑白美学</p>
+        </header>
+
+        <div id="article-list" class="post-grid">
+            <div class="loading">SYSTEM.INITIALIZING_ACCESS_PROTOCOL...</div>
+        </div>
+    </main>
+
+    <script>
+        // 1. GitHub API 自动化逻辑
+        const GITHUB_USER = '194268'; 
+        const REPO_NAME = 'SYC';
+
+        async function fetchPosts() {
+            const listContainer = document.getElementById('article-list');
+            try {
+                const response = await fetch(`https://api.github.com/repos/${GITHUB_USER}/${REPO_NAME}/contents/posts`);
+                const files = await response.json();
+                listContainer.innerHTML = ''; 
+
+                files.filter(f => f.name.endsWith('.md')).forEach((file, i) => {
+                    const title = file.name.replace('.md', '').replace(/-/g, ' ').toUpperCase();
+                    const card = document.createElement('div');
+                    card.className = 'post-card';
+                    card.style.animationDelay = `${i * 0.1}s`;
+                    card.innerHTML = `
+                        <div class="card-tag">// NODE_0${i+1}</div>
+                        <h2>${title}</h2>
+                        <div class="line-divider"></div>
+                        <a href="article.html?post=${file.name}" class="enter-link">DECODE_DOCUMENT -></a>
+                    `;
+                    listContainer.appendChild(card);
+                });
+            } catch (e) {
+                listContainer.innerHTML = '<div class="loading">ERROR: FAILED_TO_FETCH_REMOTE_RESOURCES</div>';
+            }
+        }
+        fetchPosts();
+
+        // 2. 动态背景：鼠标感应粒子
+        const canvas = document.getElementById('hero-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        const mouse = { x: -100, y: -100 };
+
+        window.onresize = () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; };
+        window.onmousemove = (e) => { mouse.x = e.clientX; mouse.y = e.clientY; };
+        window.onresize();
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 1.5;
+                this.vX = (Math.random() - 0.5) * 0.3;
+                this.vY = (Math.random() - 0.5) * 0.3;
+            }
+            update() {
+                this.x += this.vX; this.y += this.vY;
+                if(this.x < 0 || this.x > canvas.width) this.vX *= -1;
+                if(this.y < 0 || this.y > canvas.height) this.vY *= -1;
+            }
+            draw() {
+                ctx.fillStyle = 'rgba(255,255,255,0.3)';
+                ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI*2); ctx.fill();
+            }
+        }
+
+        for(let i=0; i<100; i++) particles.push(new Particle());
+
+        function animate() {
+            ctx.fillStyle = 'black'; ctx.fillRect(0,0,canvas.width, canvas.height);
+            
+            // 鼠标交互微光
+            const grad = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, 200);
+            grad.addColorStop(0, 'rgba(255,255,255,0.08)');
+            grad.addColorStop(1, 'transparent');
+            ctx.fillStyle = grad; ctx.fillRect(0,0,canvas.width, canvas.height);
+
+            particles.forEach(p => { p.update(); p.draw(); });
+            requestAnimationFrame(animate);
+        }
+        animate();
+    </script>
+</body>
+</html>
