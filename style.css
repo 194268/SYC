@@ -6,7 +6,6 @@
     <title>TERMINAL // FUTURE_TECH</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=Fira+Code&display=swap" rel="stylesheet">
     <style>
-        /* --- 核心样式 (整合自之前版本) --- */
         :root {
             --bg-black: #000000;
             --card-gray: rgba(12, 12, 12, 0.7);
@@ -14,12 +13,12 @@
             --border-bright: rgba(255, 255, 255, 0.8);
             --text-main: #ffffff;
             --text-dim: #666666;
+            --accent-white: #ffffff;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
         body { background: var(--bg-black); color: var(--text-main); font-family: 'Inter', sans-serif; overflow-x: hidden; }
 
-        /* 背景画布 */
         #hero-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; }
 
         /* 导航栏 */
@@ -33,35 +32,51 @@
             display: flex; justify-content: space-between; align-items: center; padding: 0 24px;
         }
         .logo { font-weight: 700; letter-spacing: 4px; font-size: 14px; }
-        .links a { color: var(--text-dim); text-decoration: none; font-size: 12px; margin-left: 25px; transition: 0.3s; }
+        .links a { color: var(--text-dim); text-decoration: none; font-size: 12px; margin-left: 25px; transition: 0.3s; font-family: 'Fira Code'; }
         .links a:hover { color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.5); }
 
-        /* 主体布局 */
+        /* 主体 */
         .container { max-width: 1100px; margin: 0 auto; padding: 140px 24px 80px; }
-        .hero-section { margin-bottom: 80px; }
-        .glitch-text { font-size: clamp(40px, 8vw, 72px); font-weight: 700; letter-spacing: -3px; margin-bottom: 10px; }
+        .hero-section { margin-bottom: 100px; }
+        .glitch-text { font-size: clamp(40px, 8vw, 72px); font-weight: 700; letter-spacing: -3px; margin-bottom: 15px; }
         .subtitle { font-family: 'Fira Code'; color: var(--text-dim); font-size: 13px; border-left: 2px solid #fff; padding-left: 15px; }
 
         /* 文章网格 */
         .post-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px; }
+        
+        /* 修改：卡片现在是真正的按钮感 */
         .post-card {
             background: var(--card-gray); border: 1px solid var(--border-dim);
-            padding: 40px; position: relative; transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            padding: 40px; position: relative; transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
             opacity: 0; transform: translateY(30px); animation: fadeInUp 0.8s forwards;
+            cursor: pointer; text-decoration: none; display: block; /* 使整个 div 可点击 */
+            color: inherit;
         }
+        
         .post-card:hover {
-            border-color: var(--border-bright); background: rgba(20, 20, 20, 0.9);
-            transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            border-color: var(--border-bright); background: rgba(25, 25, 25, 0.9);
+            transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.6);
         }
-        .card-tag { font-family: 'Fira Code'; font-size: 10px; color: var(--text-dim); margin-bottom: 20px; }
+        
+        .card-tag { font-family: 'Fira Code'; font-size: 10px; color: var(--text-dim); margin-bottom: 20px; transition: 0.3s; }
         .post-card h2 { font-size: 24px; font-weight: 600; margin-bottom: 15px; line-height: 1.2; }
+        
         .line-divider { width: 40px; height: 1px; background: var(--text-dim); margin: 25px 0; transition: 0.6s; }
         .post-card:hover .line-divider { width: 100%; background: #fff; }
-        .enter-link { font-family: 'Fira Code'; font-size: 11px; color: #fff; text-decoration: none; letter-spacing: 1px; opacity: 0.5; }
-        .post-card:hover .enter-link { opacity: 1; }
+        .post-card:hover .card-tag { color: #fff; }
+
+        /* 实体化的按键感链接 */
+        .enter-link-btn { 
+            font-family: 'Fira Code'; font-size: 11px; color: #fff; 
+            letter-spacing: 1px; display: inline-flex; align-items: center;
+            border: 1px solid var(--border-dim); padding: 8px 15px;
+            transition: 0.3s;
+        }
+        .post-card:hover .enter-link-btn {
+            background: #fff; color: #000; border-color: #fff;
+        }
 
         @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
-        
         .loading { font-family: 'Fira Code'; color: var(--text-dim); grid-column: 1/-1; text-align: center; padding: 50px; }
     </style>
 </head>
@@ -70,9 +85,9 @@
     
     <nav class="glass-nav">
         <div class="nav-inner">
-            <span class="logo">SOURCE_CODE //</span>
+            <span class="logo" onclick="window.scrollTo(0,0)" style="cursor:pointer">SOURCE_CODE //</span>
             <div class="links">
-                <a href="#">ARCHIVE</a>
+                <a href="#article-list">ARTICLES</a>
                 <a href="https://github.com/194268/SYC" target="_blank">GITHUB</a>
             </div>
         </div>
@@ -90,7 +105,6 @@
     </main>
 
     <script>
-        // 1. GitHub API 自动化逻辑
         const GITHUB_USER = '194268'; 
         const REPO_NAME = 'SYC';
 
@@ -103,14 +117,18 @@
 
                 files.filter(f => f.name.endsWith('.md')).forEach((file, i) => {
                     const title = file.name.replace('.md', '').replace(/-/g, ' ').toUpperCase();
-                    const card = document.createElement('div');
+                    
+                    // 修改：将整个 card 改为 <a> 标签
+                    const card = document.createElement('a');
+                    card.href = `article.html?post=${file.name}`;
                     card.className = 'post-card';
                     card.style.animationDelay = `${i * 0.1}s`;
+                    
                     card.innerHTML = `
                         <div class="card-tag">// NODE_0${i+1}</div>
                         <h2>${title}</h2>
                         <div class="line-divider"></div>
-                        <a href="article.html?post=${file.name}" class="enter-link">DECODE_DOCUMENT -></a>
+                        <div class="enter-link-btn">DECODE_DOCUMENT -></div>
                     `;
                     listContainer.appendChild(card);
                 });
@@ -120,7 +138,7 @@
         }
         fetchPosts();
 
-        // 2. 动态背景：鼠标感应粒子
+        // 动态背景逻辑（保持不变）
         const canvas = document.getElementById('hero-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
@@ -153,13 +171,10 @@
 
         function animate() {
             ctx.fillStyle = 'black'; ctx.fillRect(0,0,canvas.width, canvas.height);
-            
-            // 鼠标交互微光
             const grad = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, 200);
             grad.addColorStop(0, 'rgba(255,255,255,0.08)');
             grad.addColorStop(1, 'transparent');
             ctx.fillStyle = grad; ctx.fillRect(0,0,canvas.width, canvas.height);
-
             particles.forEach(p => { p.update(); p.draw(); });
             requestAnimationFrame(animate);
         }
