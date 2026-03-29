@@ -1,59 +1,82 @@
 :root {
-    --bg-black: #000000;
-    --card-gray: rgba(12, 12, 12, 0.7);
-    --border-dim: rgba(255, 255, 255, 0.1);
-    --border-bright: rgba(255, 255, 255, 0.8);
+    --bg-deep: #050505;
+    --bg-mid: #121212;
+    --bg-light: #1a1a1a;
+    --card-surface: rgba(15, 15, 15, 0.6);
+    --border-dim: rgba(255, 255, 255, 0.05);
+    --border-bright: rgba(255, 255, 255, 0.7);
     --text-main: #ffffff;
-    --text-dim: #666666;
+    --text-dim: #888888;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
-body { background: var(--bg-black); color: var(--text-main); font-family: 'Inter', sans-serif; overflow-x: hidden; }
 
-/* 背景画布底层 */
-#hero-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; }
+body { 
+    /* 动态渐变背景：营造液态金属质感 */
+    background: linear-gradient(125deg, var(--bg-deep), var(--bg-mid), var(--bg-light), var(--bg-deep));
+    background-size: 400% 400%;
+    animation: metalFlow 18s ease infinite;
+    color: var(--text-main); 
+    font-family: 'Inter', sans-serif; 
+    overflow-x: hidden; 
+}
 
-/* 导航栏 */
+@keyframes metalFlow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+#hero-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
+
+/* 导航栏：增强毛玻璃与透明度 */
 .glass-nav {
     position: fixed; top: 0; width: 100%; height: 70px;
     border-bottom: 1px solid var(--border-dim);
-    backdrop-filter: blur(20px); z-index: 1000;
-    transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    z-index: 1000;
+    transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    background: rgba(0, 0, 0, 0.2);
 }
-.glass-nav.scrolled { height: 50px; background: rgba(0,0,0,0.8); }
+.glass-nav.scrolled { height: 55px; background: rgba(0,0,0,0.8); }
 
 .nav-inner {
     max-width: 1100px; margin: 0 auto; height: 100%;
     display: flex; justify-content: space-between; align-items: center; padding: 0 24px;
 }
-.logo { font-weight: 700; letter-spacing: 4px; font-size: 14px; cursor: pointer; }
-.links a { color: var(--text-dim); text-decoration: none; font-size: 12px; margin-left: 25px; transition: 0.3s; font-family: 'Fira Code'; }
-.links a:hover { color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.5); }
+.logo { font-weight: 700; letter-spacing: 4px; font-size: 13px; cursor: pointer; opacity: 0.9; }
+.links a { color: var(--text-dim); text-decoration: none; font-size: 11px; margin-left: 25px; transition: 0.3s; font-family: 'Fira Code'; }
+.links a:hover { color: #fff; text-shadow: 0 0 8px rgba(255,255,255,0.4); }
 
-/* 内容布局 */
-.container { max-width: 1100px; margin: 0 auto; padding: 140px 24px 80px; }
+/* 主容器 */
+.container { max-width: 1100px; margin: 0 auto; padding: 160px 24px 80px; }
 .hero-section { margin-bottom: 100px; }
-.glitch-text { font-size: clamp(40px, 8vw, 72px); font-weight: 700; letter-spacing: -3px; margin-bottom: 15px; }
-.subtitle { font-family: 'Fira Code'; color: var(--text-dim); font-size: 13px; border-left: 2px solid #fff; padding-left: 15px; }
+.glitch-text { font-size: clamp(40px, 8vw, 72px); font-weight: 700; letter-spacing: -4px; margin-bottom: 15px; }
+.subtitle { font-family: 'Fira Code'; color: var(--text-dim); font-size: 13px; border-left: 1.5px solid #fff; padding-left: 15px; opacity: 0.7; }
 
-/* 动态卡片 */
+/* 响应式网格与卡片 */
 .post-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px; }
 .post-card {
-    background: var(--card-gray); border: 1px solid var(--border-dim);
-    padding: 40px; position: relative; transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    background: var(--card-surface); 
+    border: 1px solid var(--border-dim);
+    padding: 40px; position: relative; 
+    transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
     opacity: 0; transform: translateY(30px); animation: fadeInUp 0.8s forwards;
     cursor: pointer; text-decoration: none; display: block; color: inherit;
 }
 .post-card:hover {
-    border-color: var(--border-bright); background: rgba(25, 25, 25, 0.9);
-    transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+    border-color: var(--border-bright); 
+    background: rgba(255, 255, 255, 0.03);
+    transform: translateY(-8px); 
+    box-shadow: 0 30px 60px -12px rgba(0,0,0,0.5);
 }
-.card-tag { font-family: 'Fira Code'; font-size: 10px; color: var(--text-dim); margin-bottom: 20px; transition: 0.3s; }
-.post-card h2 { font-size: 24px; font-weight: 600; margin-bottom: 15px; line-height: 1.2; }
-.line-divider { width: 40px; height: 1px; background: var(--text-dim); margin: 25px 0; transition: 0.6s; }
+.card-tag { font-family: 'Fira Code'; font-size: 10px; color: var(--text-dim); margin-bottom: 20px; }
+.post-card h2 { font-size: 22px; font-weight: 600; margin-bottom: 15px; line-height: 1.2; letter-spacing: -0.5px; }
+.line-divider { width: 30px; height: 1px; background: var(--text-dim); margin: 25px 0; transition: 0.5s; }
 .post-card:hover .line-divider { width: 100%; background: #fff; }
-.enter-link-btn { font-family: 'Fira Code'; font-size: 11px; color: #fff; border: 1px solid var(--border-dim); padding: 8px 15px; transition: 0.3s; }
-.post-card:hover .enter-link-btn { background: #fff; color: #000; }
+.enter-link-btn { font-family: 'Fira Code'; font-size: 10px; color: #fff; border: 1px solid var(--border-dim); padding: 7px 14px; transition: 0.3s; opacity: 0.6; }
+.post-card:hover .enter-link-btn { background: #fff; color: #000; opacity: 1; border-color: #fff; }
 
 @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
 .loading { font-family: 'Fira Code'; color: var(--text-dim); grid-column: 1/-1; text-align: center; padding: 50px; }
