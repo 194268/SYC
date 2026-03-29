@@ -1,340 +1,65 @@
-/* --- 基础样式 Reset & Core --- */
 :root {
-    --bg-private: #000000;
-    --bg-card: #0a0a0a;
-    --bg-widget: #080808;
-    --text-primary: #ffffff;
-    --text-secondary: #aaaaaa;
-    --text-dim: #555555;
-    --accent-glow: rgba(255, 255, 255, 0.15);
-    --border-color: #222222;
-    --border-hover: #444444;
-    --font-main: 'Inter', sans-serif;
-    --transition-fast: 0.2s ease;
-    --transition-smooth: 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    --black: #000000;
+    --white: #ffffff;
+    --gray: #1a1a1a;
+    --light-gray: #444444;
 }
 
-* { margin: 0; padding: 0; box-box: border-box; }
-
 body {
-    background-color: var(--bg-private);
-    color: var(--text-primary);
-    font-family: var(--font-main);
-    font-size: 15px;
-    line-height: 1.6;
+    background: var(--black);
+    color: var(--white);
+    font-family: 'Inter', sans-serif;
+    margin: 0;
     overflow-x: hidden;
 }
 
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-}
+canvas { position: fixed; top: 0; z-index: -1; }
 
-a { text-decoration: none; color: inherit; transition: var(--transition-fast); }
-ul { list-style: none; }
-img { max-width: 100%; display: block; }
+.container { max-width: 1000px; margin: 0 auto; padding: 100px 20px; }
 
-/* --- 鼠标轨迹画布 --- */
-#mouse-trail {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none; /* 穿透，不影响点击 */
-    z-index: 9999; /* 最上层 */
+/* 导航 */
+.glass-nav {
+    position: fixed; top: 0; width: 100%; height: 60px;
+    border-bottom: 1px solid var(--light-gray);
+    backdrop-filter: blur(20px); z-index: 100;
 }
+.nav-inner {
+    max-width: 1000px; margin: 0 auto; height: 100%;
+    display: flex; justify-content: space-between; align-items: center; padding: 0 20px;
+}
+.logo { font-weight: 700; letter-spacing: 2px; }
 
-/* --- 顶部固定导航栏 --- */
-.main-header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 80px;
-    background-color: rgba(0, 0, 0, 0.9);
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid var(--border-color);
-    z-index: 1000;
-    transition: var(--transition-smooth);
-    display: flex;
-    align-items: center;
-}
-
-/* 导航栏滚动收缩效果 (JS触发) */
-.main-header.scrolled {
-    height: 60px;
-    background-color: rgba(0, 0, 0, 0.95);
-    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-}
-
-.header-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-}
-
-.logo {
-    font-weight: 700;
-    font-size: 20px;
-    letter-spacing: -0.5px;
-}
-.logo .dim { color: var(--text-dim); font-weight: 300; }
-
-.nav-links { display: flex; gap: 30px; }
-.nav-links a {
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 1px;
-    color: var(--text-secondary);
-}
-.nav-links a:hover, .nav-links a.active {
-    color: var(--text-primary);
-    text-shadow: 0 0 10px rgba(255,255,255,0.5);
-}
-
-.search-bar {
+/* 英雄区 */
+.hero-section { margin-bottom: 80px; }
+.glitch-text {
+    font-size: 60px; font-weight: 700;
     position: relative;
-    width: 200px;
 }
-.search-bar input {
-    width: 100%;
-    background: transparent;
-    border: 1px solid var(--border-color);
-    padding: 8px 12px 8px 35px;
-    color: var(--text-primary);
-    font-family: var(--font-main);
-    font-size: 13px;
-    border-radius: 4px;
-    transition: var(--transition-fast);
-}
-.search-bar input:focus {
-    outline: none;
-    border-color: var(--border-hover);
-    box-shadow: 0 0 10px var(--accent-glow);
-}
-.search-icon {
-    position: absolute;
-    left: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--text-dim);
-}
+.subtitle { color: var(--light-gray); font-family: 'Fira Code', monospace; font-size: 14px; }
 
-/* --- 主体布局 --- */
-.main-layout {
-    display: grid;
-    grid-template-columns: 1fr 300px;
-    gap: 40px;
-    padding-top: 120px; /* 留出导航栏空间 */
-    padding-bottom: 60px;
-}
-
-/* --- 首页轮播 (简化版) --- */
-.hero-carousel {
-    position: relative;
-    height: 400px;
-    background-color: var(--bg-card);
-    border-radius: 8px;
-    overflow: hidden;
-    margin-bottom: 40px;
-    border: 1px solid var(--border-color);
-}
-.carousel-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    opacity: 0.6;
-}
-.carousel-overlay {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    padding: 40px;
-    background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
-}
-.carousel-overlay .tag {
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 2px;
-    color: var(--text-dim);
-    margin-bottom: 10px;
-    display: block;
-}
-.carousel-overlay h1 {
-    font-size: 32px;
-    font-weight: 700;
-    line-height: 1.2;
-    margin-bottom: 20px;
-    letter-spacing: -1px;
-}
-.btn-primary {
-    background: transparent;
-    border: 1px solid var(--text-primary);
-    color: var(--text-primary);
-    padding: 10px 20px;
-    font-family: var(--font-main);
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 1px;
-    cursor: pointer;
-    transition: var(--transition-fast);
-}
-.btn-primary:hover {
-    background: var(--text-primary);
-    color: var(--bg-private);
-}
-.carousel-dots {
-    position: absolute;
-    bottom: 20px;
-    right: 20px;
-    display: flex;
-    gap: 8px;
-}
-.carousel-dots .dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--text-dim);
-    cursor: pointer;
-}
-.carousel-dots .dot.active { background: var(--text-primary); box-shadow: 0 0 5px var(--text-primary); }
-
-/* --- 文章列表区 --- */
-.section-title-wrapper {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-}
-.section-title {
-    font-size: 14px;
-    font-weight: 700;
-    letter-spacing: 2px;
-    color: var(--text-dim);
-}
-.read-more-link {
-    font-size: 12px;
-    color: var(--text-secondary);
-}
-.read-more-link:hover { color: var(--text-primary); }
-
+/* 卡片列表 */
 .post-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px;
 }
-
-/* 文章卡片 (精致微光) */
 .post-card {
-    background-color: var(--bg-card);
-    border: 1px solid var(--border-color);
-    border-radius: 6px;
-    transition: var(--transition-smooth);
-    position: relative;
-    overflow: hidden;
+    background: var(--gray);
+    border: 1px solid var(--light-gray);
+    padding: 30px;
+    transition: all 0.3s ease;
 }
-
-/* 核心动态亮点 2: 元素悬浮边框微光 */
 .post-card:hover {
-    border-color: var(--border-hover);
-    transform: translateY(-2px);
-    box-shadow: 0 10px 30px -10px rgba(255,255,255,0.1);
+    border-color: var(--white);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(255,255,255,0.05);
 }
-.post-card::after {
-    content:'';
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: radial-gradient(circle at center, rgba(255,255,255,0.08) 0%, transparent 70%);
-    opacity: 0;
-    transition: var(--transition-smooth);
-}
-.post-card:hover::after { opacity: 1; }
-
-.card-inner { padding: 25px; position: relative; z-index: 1; }
-.card-date { font-size: 12px; color: var(--text-dim); margin-bottom: 10px; display: block; }
-.card-title { font-size: 18px; font-weight: 600; line-height: 1.4; margin-bottom: 15px; transition: var(--transition-fast); }
-.post-card:hover .card-title { color: var(--text-primary); text-shadow: 0 0 8px rgba(255,255,255,0.4); }
-.card-excerpt { font-size: 14px; color: var(--text-secondary); margin-bottom: 20px; font-weight: 300; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-.card-footer { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-color); padding-top: 15px; font-size: 12px; color: var(--text-dim); }
-.card-tag { font-family: monospace; color: var(--text-secondary); }
-
-/* --- 侧边栏 --- */
-.sidebar { display: flex; flex-direction: column; gap: 30px; }
-.widget {
-    background-color: var(--bg-widget);
-    border: 1px solid var(--border-color);
-    border-radius: 6px;
-    padding: 20px;
-}
-.widget-title {
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 2px;
-    color: var(--text-dim);
-    margin-bottom: 15px;
-    text-transform: uppercase;
+.card-tag { font-size: 10px; color: var(--light-gray); margin-bottom: 10px; }
+.enter-link {
+    display: inline-block; margin-top: 20px; color: var(--white);
+    font-family: 'Fira Code', monospace; font-size: 12px;
 }
 
-.tag-cloud { display: flex; flex-wrap: wrap; gap: 8px; }
-.tag-item {
-    font-size: 11px;
-    font-family: monospace;
-    background-color: rgba(255,255,255,0.03);
-    border: 1px solid var(--border-color);
-    padding: 6px 10px;
-    color: var(--text-secondary);
-    border-radius: 4px;
-}
-.tag-item:hover {
-    border-color: var(--border-hover);
-    background-color: rgba(255,255,255,0.05);
-    color: var(--text-primary);
-}
-
-.mini-post-list li { margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid var(--border-color); }
-.mini-post-list li:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
-.mini-post-list a { font-size: 14px; color: var(--text-secondary); }
-.mini-post-list a:hover { color: var(--text-primary); padding-left: 2px; }
-
-.author-widget { text-align: center; }
-.author-avatar {
-    width: 80px; height: 80px;
-    border-radius: 50%;
-    overflow: hidden;
-    margin: 0 auto 15px auto;
-    border: 2px solid var(--border-color);
-    transition: var(--transition-smooth);
-}
-.author-widget:hover .author-avatar { border-color: var(--text-primary); box-shadow: 0 0 15px var(--accent-glow); }
-.author-name { font-size: 16px; font-weight: 600; margin-bottom: 5px; }
-.author-bio { font-size: 13px; color: var(--text-secondary); margin-bottom: 15px; font-weight: 300; }
-.author-social { display: flex; justify-content: center; gap: 15px; font-family: monospace; font-size: 12px; color: var(--text-dim); }
-.author-social a:hover { color: var(--text-primary); }
-
-/* --- 底部信息栏 --- */
-.main-footer {
-    border-top: 1px solid var(--border-color);
-    padding: 30px 0;
-    background-color: var(--bg-widget);
-    font-size: 12px;
-    color: var(--text-dim);
-}
-.footer-container { display: flex; justify-content: space-between; align-items: center; }
-.footer-links { display: flex; gap: 20px; align-items: center; }
-.status-ok { color: #00ff88; font-family: monospace; font-weight: 700; text-shadow: 0 0 5px rgba(0,255,136,0.5); }
-
-/* --- 响应式设计 --- */
-@media (max-width: 992px) {
-    .main-layout { grid-template-columns: 1fr; }
-    .sidebar { order: 2; }
-    .content-area { order: 1; }
-}
-
-@media (max-width: 768px) {
-    .nav-links { display: none; } /* 移动端简化 */
-    .post-grid { grid-template-columns: 1fr; }
-    .carousel-overlay h1 { font-size: 24px; }
-}
+/* 文章内容排版 */
+.article-content { max-width: 700px; margin: 80px auto; padding: 20px; }
+.markdown-body h1, .markdown-body h2 { border-bottom: 1px solid var(--light-gray); padding-bottom: 10px; margin-top: 40px; }
+.markdown-body p { line-height: 1.8; color: #ccc; }
+.markdown-body code { font-family: 'Fira Code'; background: #222; padding: 2px 5px; }
