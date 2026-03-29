@@ -3,27 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DECODING_SYSTEM // TERMINAL</title>
+    <title>DECODING...</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=Fira+Code&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github-dark.min.css" id="hljs-style">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
 
     <style>
-        /* 1. 核心色彩变量 */
         :root[data-theme="dark"] {
             --bg-deep: #050505; --bg-mid: #121212;
-            --content-bg: rgba(10, 10, 10, 0.7);
             --text-main: #e0e0e0; --text-dim: #666;
-            --border: rgba(255, 255, 255, 0.05);
-            --accent: #fff; --canvas-opacity: 0.6;
+            --accent: #fff; --canvas-opacity: 0.8;
         }
         :root[data-theme="light"] {
             --bg-deep: #f0f0f0; --bg-mid: #ffffff;
-            --content-bg: rgba(255, 255, 255, 0.85);
             --text-main: #1a1a1a; --text-dim: #999;
-            --border: rgba(0, 0, 0, 0.05);
-            --accent: #000; --canvas-opacity: 0.3;
+            --accent: #000; --canvas-opacity: 0.4;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; transition: background-color 0.4s, color 0.3s; }
@@ -32,14 +27,14 @@
             background: linear-gradient(135deg, var(--bg-deep), var(--bg-mid), var(--bg-deep));
             background-size: 400% 400%;
             animation: metalFlow 20s ease infinite;
-            color: var(--text-main); font-family: 'Inter', sans-serif; line-height: 1.7; overflow-x: hidden;
+            color: var(--text-main); font-family: 'Inter', sans-serif; line-height: 1.8; overflow-x: hidden;
         }
 
         @keyframes metalFlow { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
+        /* 背景 Canvas：使用主页同款流体效果 */
         #article-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; opacity: var(--canvas-opacity); }
 
-        /* 模式切换按钮 */
         .theme-toggle {
             position: fixed; bottom: 30px; right: 30px; width: 45px; height: 45px; border-radius: 50%;
             background: var(--accent); color: var(--bg-deep); border: none; cursor: pointer; z-index: 2000;
@@ -49,137 +44,145 @@
         #progress { position: fixed; top: 0; left: 0; height: 2px; background: var(--accent); width: 0%; z-index: 2000; }
 
         nav {
-            padding: 20px 40px; border-bottom: 1px solid var(--border); backdrop-filter: blur(20px);
+            padding: 20px 40px; backdrop-filter: blur(20px);
             position: sticky; top: 0; background: rgba(0,0,0,0.02); z-index: 1000;
             display: flex; justify-content: space-between; align-items: center;
         }
-        nav a { color: var(--text-dim); text-decoration: none; font-size: 11px; font-family: 'Fira Code'; }
+        nav a { color: var(--text-dim); text-decoration: none; font-size: 11px; font-family: 'Fira Code'; letter-spacing: 1px; }
         nav a:hover { color: var(--accent); }
 
-        /* 新增：文章顶部标题区域 */
-        .article-header {
-            margin-bottom: 50px; padding-bottom: 30px; border-bottom: 1px solid var(--border);
-        }
-        .article-header .meta {
-            font-family: 'Fira Code'; font-size: 12px; color: var(--text-dim); margin-bottom: 10px; display: block;
-        }
-        .article-header h1 {
-            font-size: clamp(32px, 5vw, 48px); font-weight: 700; color: var(--accent);
-            letter-spacing: -2px; line-height: 1.1; text-transform: uppercase;
-        }
-
+        /* 内容容器：去掉边框和背景色，实现无界感 */
         .content-wrapper {
-            max-width: 850px; margin: 60px auto; padding: 60px 50px;
-            background: var(--content-bg); border: 1px solid var(--border);
-            backdrop-filter: blur(10px); border-radius: 4px; box-shadow: 0 40px 100px rgba(0,0,0,0.1);
+            max-width: 900px; margin: 40px auto; padding: 40px 24px;
         }
 
-        /* Markdown 内容样式 */
-        .markdown-body h2 { font-size: 24px; margin: 40px 0 20px; color: var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 10px; }
-        .markdown-body pre { background: #0d1117 !important; padding: 24px; border: 1px solid #30363d; border-radius: 8px; margin: 30px 0; overflow-x: auto; }
-        .markdown-body code { font-family: 'Fira Code'; font-size: 14px; background: rgba(128,128,128,0.1); padding: 2px 5px; border-radius: 4px; }
+        /* 标题区域 */
+        .article-header { margin-bottom: 60px; text-align: left; }
+        .article-header h1 {
+            font-size: clamp(32px, 6vw, 56px); font-weight: 700; color: var(--accent);
+            letter-spacing: -3px; line-height: 1.1; text-transform: uppercase;
+        }
 
-        @media (max-width: 768px) { .content-wrapper { margin: 20px; padding: 30px 20px; } }
+        /* Markdown 内容与图片防溢出 */
+        .markdown-body img { 
+            max-width: 100%; 
+            height: auto; 
+            border-radius: 8px; 
+            margin: 20px 0;
+            display: block;
+        }
+        .markdown-body h2 { font-size: 26px; margin: 45px 0 20px; color: var(--accent); letter-spacing: -1px; }
+        .markdown-body p { margin-bottom: 25px; opacity: 0.9; }
+        .markdown-body pre { 
+            background: rgba(0,0,0,0.3) !important; 
+            padding: 24px; border: 1px solid var(--border); border-radius: 12px; 
+            margin: 30px 0; overflow-x: auto; backdrop-filter: blur(5px);
+        }
+        .markdown-body code { font-family: 'Fira Code'; font-size: 14px; background: rgba(128,128,128,0.1); padding: 2px 6px; border-radius: 4px; }
+
+        @media (max-width: 768px) { .content-wrapper { padding: 20px; } nav { padding: 15px 20px; } }
     </style>
 </head>
 <body>
     <div id="progress"></div>
     <canvas id="article-canvas"></canvas>
     
-    <button class="theme-toggle" onclick="toggleTheme()" id="theme-btn">MODE</button>
+    <button class="theme-toggle" onclick="toggleTheme()">MODE</button>
 
     <nav>
         <a href="index.html"><- BACK_TO_TERMINAL</a>
-        <span id="reading-id" style="font-family:'Fira Code'; font-size: 10px; color: var(--text-dim);">STATUS: READY</span>
+        <span id="reading-id" style="font-family:'Fira Code'; font-size: 10px; color: var(--text-dim);">SYSTEM: OK</span>
     </nav>
 
     <main class="content-wrapper">
         <header class="article-header">
-            <span class="meta" id="article-meta">FILE_SOURCE: NULL</span>
             <h1 id="article-title">INITIALIZING...</h1>
         </header>
 
         <article id="render-content" class="markdown-body">
-            <div style="color: var(--text-dim); font-family: 'Fira Code';">DECODING_REMOTE_MARKDOWN...</div>
+            <div style="color: var(--text-dim); font-family: 'Fira Code';">DECODING_REMOTE_STREAM...</div>
         </article>
     </main>
 
     <script>
-        // --- 1. 主题切换逻辑 ---
+        // --- 1. 动态 Title 效果 (主页同款) ---
+        let fullTitle = "DECODING...";
+        let titleIdx = 0, isDel = false;
+        function animateTitle() {
+            document.title = isDel ? fullTitle.substring(0, titleIdx) : fullTitle.substring(0, titleIdx + 1);
+            let speed = isDel ? 70 : 150;
+            if (!isDel && titleIdx === fullTitle.length) { speed = 3000; isDel = true; }
+            else if (isDel && titleIdx === 0) { isDel = false; }
+            titleIdx = isDel ? titleIdx - 1 : titleIdx + 1;
+            setTimeout(animateTitle, speed);
+        }
+
+        // --- 2. 主题切换 ---
         function toggleTheme() {
             const root = document.documentElement;
-            const current = root.getAttribute('data-theme');
-            const target = current === 'dark' ? 'light' : 'dark';
+            const target = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
             root.setAttribute('data-theme', target);
             localStorage.setItem('theme', target);
-            const hljsStyle = document.getElementById('hljs-style');
-            hljsStyle.href = target === 'dark' 
+            document.getElementById('hljs-style').href = target === 'dark' 
                 ? "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github-dark.min.css"
                 : "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github.min.css";
         }
-        const savedTheme = localStorage.getItem('theme') || 'dark';
-        document.documentElement.setAttribute('data-theme', savedTheme);
+        document.documentElement.setAttribute('data-theme', localStorage.getItem('theme') || 'dark');
 
-        // --- 2. 动态加载内容与设置标题 ---
-        const GITHUB_USER = '194268'; 
-        const REPO_NAME = 'SYC';
+        // --- 3. 加载内容 & 设置标题 ---
         const urlParams = new URLSearchParams(window.location.search);
         const postName = urlParams.get('post');
 
         if (postName) {
-            // 解析标题：去除 .md，将中划线替换为空格，转大写
-            const displayTitle = postName.replace('.md', '').replace(/-/g, ' ').toUpperCase();
-            document.getElementById('article-title').innerText = displayTitle;
-            document.getElementById('article-meta').innerText = `FILE_SOURCE: ${postName}`;
-            document.title = `${displayTitle} // DECODING`;
+            const cleanTitle = postName.replace('.md', '').replace(/-/g, ' ').toUpperCase();
+            document.getElementById('article-title').innerText = cleanTitle;
+            fullTitle = `<< ${cleanTitle} >>`; // 更新动态标题内容
+            animateTitle(); // 启动标题动画
 
-            fetch(`https://raw.githubusercontent.com/${GITHUB_USER}/${REPO_NAME}/main/posts/${postName}`)
+            fetch(`https://raw.githubusercontent.com/194268/SYC/main/posts/${postName}`)
                 .then(res => res.text())
                 .then(md => {
-                    // 如果文章内部也有一级标题 #，建议通过逻辑去除，避免重复显示
                     document.getElementById('render-content').innerHTML = marked.parse(md);
-                    document.getElementById('reading-id').innerText = `STATUS: DECODED`;
                     hljs.highlightAll();
                 });
         }
 
-        // --- 3. 动态背景逻辑 (自适应色彩) ---
+        // --- 4. 动态背景 (流体光影) ---
         const canvas = document.getElementById('article-canvas');
         const ctx = canvas.getContext('2d');
-        let particles = [];
+        let fluidNodes = [];
 
         function initCanvas() {
             canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-            particles = Array.from({length: 50}, () => ({
-                x: Math.random() * canvas.width, y: Math.random() * canvas.height,
-                vx: (Math.random() - 0.5) * 0.3, vy: (Math.random() - 0.5) * 0.3, size: Math.random() * 1.5
+            fluidNodes = Array.from({length: 3}, () => ({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                vx: (Math.random() - 0.5) * 0.5,
+                vy: (Math.random() - 0.5) * 0.5,
+                size: Math.random() * (canvas.width * 0.4) + canvas.width * 0.3
             }));
         }
 
         function draw() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-            const colorBase = isDark ? "255, 255, 255," : "0, 0, 0,";
+            ctx.fillStyle = "rgba(0,0,0,0.1)"; // 留一点点残影
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
             
-            particles.forEach(p => {
-                p.x += p.vx; p.y += p.vy;
-                if(p.x < 0 || p.x > canvas.width) p.vx *= -1;
-                if(p.y < 0 || p.y > canvas.height) p.vy *= -1;
-                ctx.fillStyle = `rgba(${colorBase} 0.15)`;
-                ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI*2); ctx.fill();
+            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            ctx.globalCompositeOperation = isDark ? "lighter" : "multiply";
+
+            fluidNodes.forEach(node => {
+                node.x += node.vx; node.y += node.vy;
+                if (node.x < 0 || node.x > canvas.width) node.vx *= -1;
+                if (node.y < 0 || node.y > canvas.height) node.vy *= -1;
+
+                const g = ctx.createRadialGradient(node.x, node.y, 0, node.x, node.y, node.size);
+                const color = isDark ? "30, 30, 30" : "220, 220, 220";
+                g.addColorStop(0, `rgba(${color}, 0.4)`);
+                g.addColorStop(1, "transparent");
+                ctx.fillStyle = g;
+                ctx.beginPath(); ctx.arc(node.x, node.y, node.size, 0, Math.PI*2); ctx.fill();
             });
 
-            ctx.strokeStyle = `rgba(${colorBase} 0.03)`;
-            for(let i=0; i<particles.length; i++) {
-                for(let j=i+1; j<particles.length; j++) {
-                    const dx = particles[i].x - particles[j].x;
-                    const dy = particles[i].y - particles[j].y;
-                    if(Math.sqrt(dx*dx + dy*dy) < 150) {
-                        ctx.beginPath(); ctx.moveTo(particles[i].x, particles[i].y);
-                        ctx.lineTo(particles[j].x, particles[j].y); ctx.stroke();
-                    }
-                }
-            }
             requestAnimationFrame(draw);
         }
 
