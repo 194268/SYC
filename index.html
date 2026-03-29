@@ -3,7 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TERMINAL // TECH BLOG</title>
+     <title>未来至上</title>
+  <script>
+    // 动态 title 渐变闪烁
+    const titles = ["技术博客 | 未来感至上", "Tech Blog | Future First", "精致黑白 | 动态交互"];
+    let index = 0;
+
+    setInterval(() => {
+      document.title = titles[index];
+      index = (index + 1) % titles.length;
+    }, 1200); // 切换速度，毫秒
+  </script>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=Fira+Code&display=swap" rel="stylesheet">
 </head>
@@ -23,7 +33,7 @@
     <main class="container">
         <header class="hero-section">
             <h1 class="glitch-text" data-text="EVOLVING_LOGIC">EVOLVING_LOGIC</h1>
-            <p class="subtitle">// 纯粹技术分享 / 极简黑白美学 / 边缘计算与未来</p>
+            <p class="subtitle">// 纯粹技术分享 / 边缘计算与未来</p>
         </header>
 
         <div id="article-list" class="post-grid">
@@ -34,8 +44,8 @@
     <script>
         // 自动化逻辑：获取 GitHub 仓库内容
         // 替换为你的 GitHub 用户名和仓库名
-        const GITHUB_USER = '你的用户名'; 
-        const REPO_NAME = '你的仓库名';
+        const GITHUB_USER = '194268'; 
+        const REPO_NAME = 'SYC';
 
         async function fetchPosts() {
             const listContainer = document.getElementById('article-list');
