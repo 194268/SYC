@@ -1,12 +1,26 @@
-:root {
-    --bg-deep: #050505;
-    --bg-mid: #121212;
-    --bg-light: #1a1a1a;
-    --card-surface: rgba(15, 15, 15, 0.6);
-    --border-dim: rgba(255, 255, 255, 0.05);
-    --border-bright: rgba(255, 255, 255, 0.7);
-    --text-main: #ffffff;
-    --text-dim: #888888;
+/* --- 强化色彩变量：支持日夜模式智能反转 --- */
+:root[data-theme="dark"] {
+    /* 暗黑模式 */
+    --bg-1: #050505; 
+    --bg-2: #0a0c1a; 
+    --bg-3: #120d1a;
+    --text-main: #ffffff;      /* 主文字：纯白 */
+    --text-dim: rgba(255, 255, 255, 0.6); /* 次级文字（那行字）：半透明白 */
+    --accent: #ffffff; 
+    --card-bg: rgba(255, 255, 255, 0.03);
+    --border-color: rgba(255, 255, 255, 0.1); /* 边框色 */
+}
+
+:root[data-theme="light"] {
+    /* 日间模式 */
+    --bg-1: #fdfdfd; 
+    --bg-2: #f0f4ff; 
+    --bg-3: #f9f0ff;
+    --text-main: #000000;      /* 主文字：纯黑 */
+    --text-dim: rgba(0, 0, 0, 0.6); /* 次级文字（那行字）：半透明黑，解决看不清问题 */
+    --accent: #000000; 
+    --card-bg: rgba(0, 0, 0, 0.02);
+    --border-color: rgba(0, 0, 0, 0.1); /* 边框色 */
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
