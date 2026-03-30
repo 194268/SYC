@@ -13,16 +13,23 @@
     <button id="theme-toggle" class="theme-toggle" onclick="toggleTheme()">MODE</button>
     
     <nav class="glass-nav" id="main-nav">
-        <div class="nav-inner">
-            <span class="logo" onclick="window.scrollTo({top:0, behavior:'smooth'})">
-                TERMINAL // SYC
-            </span>
-            
-            <div class="links">
-                <a href="#article-list">ARTICLES</a>
-                <a href="https://github.com/194268/SYC" target="_blank">GITHUB</a>
+        <div class="links">
+    <a href="javascript:void(0)" onclick="toggleSearch()" id="search-btn">SEARCH_</a>
+    <a href="#article-list">ARTICLES</a>
+    <a href="https://github.com/194268/SYC" target="_blank">GITHUB</a>
+</div>
+
+<div id="search-overlay" class="search-overlay">
+    <div class="search-content">
+        <div class="search-header">
+            <span class="terminal-prompt">SYC@TERMINAL:~# query_</span>
+            <input type="text" id="search-input" placeholder="输入关键字搜索文档..." autocomplete="off">
+            <span class="close-search" onclick="toggleSearch()">[ESC]</span>
+        </div>
+        <div id="search-results" class="post-grid">
             </div>
-        </div> </nav>
+    </div>
+</div></nav>
 
     <main class="container">
         <header class="hero-section">
