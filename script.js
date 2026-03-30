@@ -7,12 +7,24 @@ document.addEventListener('DOMContentLoaded', () => {
         document.documentElement.setAttribute('data-theme', savedTheme);
     }
 
-    window.toggleTheme = () => {
-        const currentTheme = document.documentElement.getAttribute('data-theme');
-        const targetTheme = currentTheme === 'dark' ? 'light' : 'dark';
-        document.documentElement.setAttribute('data-theme', targetTheme);
-        localStorage.setItem('theme', targetTheme);
-    };
+    // 在 script.js 中更新/替换 toggleTheme
+window.toggleTheme = () => {
+    const root = document.documentElement;
+    const target = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', target);
+    localStorage.setItem('theme', target);
+    
+    // 如果页面上有 highlight.js，同步更新样式
+    const hljsStyle = document.getElementById('hljs-style');
+    if (hljsStyle) {
+        hljsStyle.href = target === 'dark' 
+            ? "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github-dark.min.css"
+            : "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github.min.css";
+    }
+};
+
+// 初始化主题（放在 DOMContentLoaded 最前面）
+document.documentElement.setAttribute('data-theme', localStorage.getItem('theme') || 'dark');
     
     initTheme();
 
