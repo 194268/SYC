@@ -1,247 +1,74 @@
-/* --- 1. 核心变量控制：支持日夜模式智能反转 --- */
+/* --- 1. 变量强化：定义顶栏专用颜色 --- */
 :root[data-theme="dark"] {
-    /* 背景色：暗黑 -> 深蓝 -> 深紫 */
-    --bg-deep: #050505; 
-    --bg-mid: #0a0c1a; 
-    --bg-light: #120d1a;
-    
-    --text-main: #ffffff; 
-    --text-dim: rgba(255, 255, 255, 0.6); 
-    --accent: #ffffff; 
-    
-    /* 幽灵卡片控制：初始透明度极低，靠边框勾勒 */
-    --card-bg: rgba(255, 255, 255, 0.02);
-    --border-dim: rgba(255, 255, 255, 0.15); /* 未触发时边框稍微亮一点点 */
-    --border-bright: rgba(255, 255, 255, 0.8);
-    --nav-bg: rgba(0, 0, 0, 0.2);
+    --bg-1: #050505; --bg-2: #0a0c1a; --bg-3: #120d1a;
+    --text-main: #ffffff;
+    --text-dim: rgba(255, 255, 255, 0.6);
+    --accent: #ffffff;
+    --border-dim: rgba(255, 255, 255, 0.1);
+    /* 顶栏对比色：深蓝黑，区别于背景的纯黑 */
+    --nav-bg: #0a0a0f; 
 }
 
 :root[data-theme="light"] {
-    /* 背景色：纯白 -> 浅蓝 -> 浅紫 */
-    --bg-deep: #fdfdfd; 
-    --bg-mid: #f0f4ff; 
-    --bg-light: #f9f0ff;
-    
-    --text-main: #000000; 
-    --text-dim: rgba(0, 0, 0, 0.6); 
-    --accent: #000000; 
-    
-    --card-bg: rgba(0, 0, 0, 0.01);
-    --border-dim: rgba(0, 0, 0, 0.12);
-    --border-bright: rgba(0, 0, 0, 0.9);
-    --nav-bg: rgba(255, 255, 255, 0.3);
+    --bg-1: #fdfdfd; --bg-2: #f0f4ff; --bg-3: #f9f0ff;
+    --text-main: #000000;
+    --text-dim: rgba(0, 0, 0, 0.6);
+    --accent: #000000;
+    --border-dim: rgba(0, 0, 0, 0.1);
+    /* 顶栏对比色：纯白，区别于背景的浅灰/浅蓝 */
+    --nav-bg: #ffffff; 
 }
 
-/* --- 2. 基础重置与全局样式 --- */
-* { 
-    margin: 0; 
-    padding: 0; 
-    box-sizing: border-box; 
-    scroll-behavior: smooth; 
-}
-
-body { 
-    background: linear-gradient(125deg, var(--bg-deep), var(--bg-mid), var(--bg-light), var(--bg-deep));
-    background-size: 400% 400%;
-    animation: metalFlow 18s ease infinite;
-    color: var(--text-main); 
-    font-family: 'Inter', -apple-system, sans-serif; 
-    overflow-x: hidden; 
-}
-
-@keyframes metalFlow {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
-
-#hero-canvas { 
-    position: fixed; 
-    top: 0; 
-    left: 0; 
-    width: 100%; 
-    height: 100%; 
-    z-index: -1; 
-    pointer-events: none; 
-}
-
-/* --- 3. 导航栏样式 --- */
+/* --- 2. 导航栏：色调对比增强 --- */
 .glass-nav {
-    position: fixed; 
-    top: 0; 
-    width: 100%; 
-    height: 70px;
+    position: fixed; top: 0; width: 100%; height: 70px;
+    background: var(--nav-bg); /* 使用对比色 */
     border-bottom: 1px solid var(--border-dim);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 4px 30px rgba(0,0,0,0.1);
     z-index: 1000;
-    transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-    background: var(--nav-bg);
+    display: flex; align-items: center;
 }
 
-.glass-nav.scrolled { 
-    height: 55px; 
-    background: var(--bg-deep); 
-    opacity: 0.95;
-}
-
-.nav-inner {
-    max-width: 1100px; 
-    margin: 0 auto; 
-    height: 100%;
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center; 
-    padding: 0 24px;
-}
-
-.logo { 
-    font-weight: 700; 
-    letter-spacing: 4px; 
-    font-size: 13px; 
-    cursor: pointer; 
-    color: var(--text-main);
-    text-decoration: none;
-}
-
-.links a { 
-    color: var(--text-dim); 
-    text-decoration: none; 
-    font-size: 11px; 
-    margin-left: 25px; 
-    transition: 0.3s; 
-    font-family: 'Fira Code', monospace; 
-}
-
-.links a:hover { 
-    color: var(--text-main); 
-    text-shadow: 0 0 8px var(--text-dim); 
-}
-
-/* --- 4. 容器与 Hero 区域 --- */
-.container { 
-    max-width: 1100px; 
-    margin: 0 auto; 
-    padding: 160px 24px 80px; 
-}
-
-.hero-section { margin-bottom: 100px; }
-
-.glitch-text { 
-    font-size: clamp(40px, 8vw, 72px); 
-    font-weight: 700; 
-    letter-spacing: -4px; 
-    margin-bottom: 15px; 
-    line-height: 0.9;
-}
-
-.subtitle {
-    font-family: 'Fira Code', monospace;
-    font-size: 13px;
-    color: var(--text-dim); 
-    border-left: 2px solid var(--text-main); 
-    padding-left: 15px;
-    opacity: 0.9;
-}
-
-/* --- 5. 幽灵卡片网格样式 --- */
-.post-grid { 
-    display: grid; 
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); 
-    gap: 30px; 
-}
-
+/* --- 3. 暴力 Hover 特效 --- */
 .post-card {
-    /* 核心：初始背景几乎全透明，仅靠边框支撑视觉 */
-    background: var(--card-bg); 
-    backdrop-filter: blur(5px); /* 微弱的毛玻璃，增强深度感 */
+    background: var(--card-bg);
+    backdrop-filter: blur(10px);
     border: 1px solid var(--border-dim);
-    
-    padding: 40px; 
-    position: relative; 
-    transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-    
-    /* 初始动画 */
-    opacity: 0; 
-    transform: translateY(30px); 
-    animation: fadeInUp 0.8s forwards;
-    
-    cursor: pointer; 
-    text-decoration: none; 
-    display: block; 
+    padding: 40px;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* 弹性曲线 */
+    cursor: pointer;
+    text-decoration: none;
+    display: block;
     color: inherit;
+    position: relative;
     overflow: hidden;
 }
 
 .post-card:hover {
-    /* Hover：边框激活，背景略微增亮，产生实体感 */
-    border-color: var(--border-bright); 
-    background: rgba(128, 128, 128, 0.08);
-    transform: translateY(-8px); 
-    box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.2);
+    /* 暴力三件套：放大、亮边、投影 */
+    transform: scale(1.05) translateY(-10px) rotateX(2deg); 
+    border-color: var(--text-main);
+    background: rgba(128, 128, 128, 0.1);
+    box-shadow: 0 40px 80px -15px rgba(0, 0, 0, 0.5);
+    z-index: 10;
 }
 
-.card-tag { 
-    font-family: 'Fira Code'; 
-    font-size: 10px; 
-    color: var(--text-dim); 
-    margin-bottom: 20px; 
-}
-
-.post-card h2 { 
-    font-size: 22px; 
-    font-weight: 600; 
-    margin-bottom: 15px; 
-    line-height: 1.2; 
-    letter-spacing: -0.5px; 
-}
-
+/* Hover 时内部线条的暴力伸展 */
 .line-divider { 
-    width: 30px; 
-    height: 1px; 
-    background: var(--text-dim); 
-    margin: 25px 0; 
-    transition: 0.5s; 
+    width: 30px; height: 1px; background: var(--text-dim); 
+    margin: 25px 0; transition: width 0.4s ease; 
 }
-
 .post-card:hover .line-divider { 
-    width: 100%; 
-    background: var(--text-main); 
+    width: 100%; background: var(--text-main); 
 }
 
-.enter-link-btn { 
-    font-family: 'Fira Code'; 
-    font-size: 10px; 
-    color: var(--text-main); 
-    border: 1px solid var(--border-dim); 
-    padding: 7px 14px; 
-    transition: 0.3s; 
-    opacity: 0.6; 
+/* --- 4. 模式切换按钮 (浮动圆钮，与文章页一致) --- */
+.theme-toggle {
+    position: fixed; bottom: 30px; right: 30px; width: 55px; height: 55px; border-radius: 50%;
+    background: var(--text-main); color: var(--bg-1); border: none; cursor: pointer; z-index: 2000;
+    display: flex; align-items: center; justify-content: center; font-family: 'Fira Code'; 
+    font-size: 11px; font-weight: bold;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
-
-.post-card:hover .enter-link-btn { 
-    background: var(--text-main); 
-    color: var(--bg-deep); /* 文字反色 */
-    opacity: 1; 
-    border-color: var(--text-main); 
-}
-
-/* --- 6. 其他组件 --- */
-@keyframes fadeInUp { 
-    to { opacity: 1; transform: translateY(0); } 
-}
-
-.loading { 
-    font-family: 'Fira Code'; 
-    color: var(--text-dim); 
-    grid-column: 1/-1; 
-    text-align: center; 
-    padding: 80px; 
-}
-
-/* 响应式适配 */
-@media (max-width: 768px) {
-    .container { padding: 120px 20px 40px; }
-    .glitch-text { font-size: 48px; }
-    .post-grid { grid-template-columns: 1fr; }
-}
+.theme-toggle:hover { transform: scale(1.15) rotate(15deg); }
