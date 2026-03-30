@@ -99,7 +99,7 @@ body {
 }
 
 .nav-inner::before {
-    content: "SYS_LINK_READY";
+    content: "";
     position: absolute;
     left: -40px;
     top: 50%;
