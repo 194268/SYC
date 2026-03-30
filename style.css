@@ -1,74 +1,63 @@
-/* --- 1. 变量强化：定义顶栏专用颜色 --- */
+/* --- 1. 变量同步：与 article 一致 --- */
 :root[data-theme="dark"] {
     --bg-1: #050505; --bg-2: #0a0c1a; --bg-3: #120d1a;
     --text-main: #ffffff;
-    --text-dim: rgba(255, 255, 255, 0.6);
+    --text-dim: rgba(255, 255, 255, 0.5);
     --accent: #ffffff;
-    --border-dim: rgba(255, 255, 255, 0.1);
-    /* 顶栏对比色：深蓝黑，区别于背景的纯黑 */
-    --nav-bg: #0a0a0f; 
+    --card-bg: rgba(255, 255, 255, 0.03);
+    --border-dim: rgba(255, 255, 255, 0.12);
 }
 
 :root[data-theme="light"] {
     --bg-1: #fdfdfd; --bg-2: #f0f4ff; --bg-3: #f9f0ff;
     --text-main: #000000;
-    --text-dim: rgba(0, 0, 0, 0.6);
+    --text-dim: rgba(0, 0, 0, 0.5);
     --accent: #000000;
+    --card-bg: rgba(0, 0, 0, 0.02);
     --border-dim: rgba(0, 0, 0, 0.1);
-    /* 顶栏对比色：纯白，区别于背景的浅灰/浅蓝 */
-    --nav-bg: #ffffff; 
 }
 
-/* --- 2. 导航栏：色调对比增强 --- */
+/* --- 2. 导航栏：强化对比度 --- */
 .glass-nav {
     position: fixed; top: 0; width: 100%; height: 70px;
-    background: var(--nav-bg); /* 使用对比色 */
+    /* 增加底边框和更强的模糊，确保与背景分离 */
     border-bottom: 1px solid var(--border-dim);
-    box-shadow: 0 4px 30px rgba(0,0,0,0.1);
+    backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
     z-index: 1000;
-    display: flex; align-items: center;
+    background: rgba(var(--text-main-rgb, 0,0,0), 0.05); 
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
 }
 
-/* --- 3. 暴力 Hover 特效 --- */
+/* --- 3. Post Card：保留放大与变色特效 --- */
 .post-card {
     background: var(--card-bg);
-    backdrop-filter: blur(10px);
     border: 1px solid var(--border-dim);
     padding: 40px;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* 弹性曲线 */
-    cursor: pointer;
-    text-decoration: none;
-    display: block;
-    color: inherit;
-    position: relative;
-    overflow: hidden;
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    cursor: pointer; text-decoration: none; display: block; color: inherit;
+    position: relative; overflow: hidden;
 }
 
 .post-card:hover {
-    /* 暴力三件套：放大、亮边、投影 */
-    transform: scale(1.05) translateY(-10px) rotateX(2deg); 
+    /* 特效：放大 + 变色 + 阴影 */
+    transform: translateY(-10px) scale(1.02); 
+    background: var(--text-main); /* 变色：变为背景反色 */
+    color: var(--bg-1);           /* 文字变为主题背景色 */
     border-color: var(--text-main);
-    background: rgba(128, 128, 128, 0.1);
-    box-shadow: 0 40px 80px -15px rgba(0, 0, 0, 0.5);
-    z-index: 10;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2);
 }
 
-/* Hover 时内部线条的暴力伸展 */
-.line-divider { 
-    width: 30px; height: 1px; background: var(--text-dim); 
-    margin: 25px 0; transition: width 0.4s ease; 
-}
-.post-card:hover .line-divider { 
-    width: 100%; background: var(--text-main); 
-}
+/* Hover 时内部元素的联动 */
+.post-card:hover .card-tag, 
+.post-card:hover .line-divider { background: var(--bg-1); color: var(--bg-1); opacity: 0.6; }
+.post-card:hover .enter-link-btn { border-color: var(--bg-1); color: var(--bg-1); }
 
-/* --- 4. 模式切换按钮 (浮动圆钮，与文章页一致) --- */
+/* 模式切换按钮：直接复用 article 的圆形反色按钮样式 */
 .theme-toggle {
-    position: fixed; bottom: 30px; right: 30px; width: 55px; height: 55px; border-radius: 50%;
+    position: fixed; bottom: 30px; right: 30px; width: 48px; height: 48px; border-radius: 50%;
     background: var(--text-main); color: var(--bg-1); border: none; cursor: pointer; z-index: 2000;
-    display: flex; align-items: center; justify-content: center; font-family: 'Fira Code'; 
-    font-size: 11px; font-weight: bold;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    display: flex; align-items: center; justify-content: center; font-family: 'Fira Code'; font-size: 10px; font-weight: bold;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    transition: transform 0.3s;
 }
-.theme-toggle:hover { transform: scale(1.15) rotate(15deg); }
+.theme-toggle:active { transform: scale(0.9); }
