@@ -1,20 +1,8 @@
 {
-  "cleanUrls": true,
   "rewrites": [
     {
-      "source": "/posts/:path*",
-      "destination": "/article.html?post=:path*.md"
-    }
-  ],
-  "headers": [
-    {
-      "source": "/(.*)",
-      "headers": [
-        {
-          "key": "X-Robots-Tag",
-          "value": "index, follow"
-        }
-      ]
+      "source": "/posts/(?<post>.*)",
+      "destination": "/article.html?post=:post.md"
     }
   ]
 }
