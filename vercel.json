@@ -2,8 +2,8 @@
   "cleanUrls": true,
   "rewrites": [
     {
-      "source": "/posts/:path",
-      "destination": "/article.html?post=:path.md"
+      "source": "/posts/:path*",
+      "destination": "/article.html?post=:path*.md"
     }
   ],
   "headers": [
