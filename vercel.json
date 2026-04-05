@@ -1,8 +1,8 @@
 {
   "rewrites": [
     {
-      "source": "/post/(?<post>.*)",
-      "destination": "/article.html?post=:post.md"
+      "source": "/p/:path*",
+      "destination": "/article.html?post=:path*.md"
     }
   ]
 }
