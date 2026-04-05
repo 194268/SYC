@@ -57,7 +57,7 @@ def generate_site_assets():
 
         # --- 核心修改：使用静态路径 ---
         clean_name = file_name.replace('.md', '')
-        static_url = f"{BASE_URL}/posts/{clean_name}"
+        static_url = f"{BASE_URL}/p/{clean_name}"
         
         sitemap_content.append('  <url>')
         sitemap_content.append(f'    <loc>{static_url}</loc>')
