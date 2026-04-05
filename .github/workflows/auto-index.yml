@@ -4,10 +4,15 @@ on:
   push:
     paths:
       - 'posts/**' # 只有当 posts 文件夹内容变化时才触发
+  workflow_dispatch: # 允许手动触发调试
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    # 授予 Actions 推送代码所需的写权限
+    permissions:
+      contents: write
+      
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
@@ -19,13 +24,25 @@ jobs:
         with:
           python-version: '3.x'
 
-      - name: Update list.json
+      - name: Update Site Assets
+        # 确保你的 Python 文件名确实是 update_index.py
         run: python update_index.py
 
       - name: Commit and Push changes
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add list.json
-          git commit -m "auto: update article index [skip ci]" || echo "No changes to commit"
-          git push
+          
+          # 关键修改：显式添加生成的文件
+          git add list.json sitemap.xml
+          
+          # 如果你有 robots.txt 也可以加上：
+          # git add list.json sitemap.xml robots.txt
+          
+          # 检查是否有文件变动，防止空提交报错
+          if git diff --quiet && git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "auto: update article index and sitemap [skip ci]"
+            git push
+          fi
