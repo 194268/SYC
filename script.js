@@ -102,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // 修改链接地址：不再指向 article.html?post=...
             // 而是配合 vercel.json 指向静态路径
-            card.href = `/posts/${cleanName}`; 
+            card.href = `/p/${cleanName}`; 
             
             card.innerHTML = `
                 <div class="card-tag">// NODE_0${String(i + 1).padStart(2, '0')}</div>
