@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // --- 0. 主题初始化与切换 (与 article.html 深度同步) ---
+    // --- 0. 主题初始化与切换 (保持原样) ---
     const root = document.documentElement;
     const initTheme = () => {
         const savedTheme = localStorage.getItem('theme') || 'dark';
@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('theme', target);
     };
 
-    // --- 1. 标题动画 (<<未来至上>>) ---
+    // --- 1. 标题动画 (保持原样) ---
     let baseTitle = "<<未来至上>>";
     let titleIdx = 0, isDel = false;
     function animateTitle() {
@@ -26,11 +26,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     animateTitle();
 
-    // --- 2. 导航栏滚动检测 ---
+    // --- 2. 导航栏滚动检测 (保持原样) ---
     window.addEventListener('scroll', () => {
         const nav = document.getElementById('main-nav');
         if (nav) {
-            // 降低阈值到 20px，让反馈更即时
             if (window.scrollY > 20) {
                 nav.classList.add('scrolled');
             } else {
@@ -40,9 +39,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // --- 3. 搜索交互逻辑 & 全自动化文章抓取 ---
-    let allPosts = []; // 全局存储文章文件名
+    let allPosts = []; 
 
-    // 搜索切换功能
     window.toggleSearch = () => {
         const overlay = document.getElementById('search-overlay');
         const input = document.getElementById('search-input');
@@ -51,15 +49,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const isActive = overlay.classList.toggle('active');
         if (isActive) {
             input.focus();
-            document.body.style.overflow = 'hidden'; // 搜索时锁定背景滚动
+            document.body.style.overflow = 'hidden';
         } else {
             input.value = '';
-            renderPosts(allPosts, 'search-results'); // 退出时重置搜索预览
+            renderPosts(allPosts, 'search-results');
             document.body.style.overflow = 'auto';
         }
     };
 
-    // 监听全局快捷键：Esc 关闭，'/' 唤起
     window.addEventListener('keydown', (e) => {
         const overlay = document.getElementById('search-overlay');
         if (e.key === 'Escape' && overlay.classList.contains('active')) {
@@ -71,12 +68,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // 实时搜索过滤监听
     const searchInput = document.getElementById('search-input');
     if (searchInput) {
         searchInput.addEventListener('input', (e) => {
             const term = e.target.value.toLowerCase().trim();
-            // 同时匹配原始文件名和格式化后的标题
             const filtered = allPosts.filter(name => {
                 const formattedName = name.replace(/-/g, ' ').toLowerCase();
                 return name.toLowerCase().includes(term) || formattedName.includes(term);
@@ -85,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 核心渲染函数 (主页和搜索共用)
+    // --- 【关键修改点】核心渲染函数：改用静态路径 ---
     function renderPosts(files, targetId) {
         const container = document.getElementById(targetId);
         if (!container) return;
@@ -97,10 +92,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         files.forEach((fileName, i) => {
-            const title = fileName.replace('.md', '').replace(/-/g, ' ').toUpperCase();
+            // 提取文件名（去掉 .md），用于生成 /posts/xxx 路径
+            const cleanName = fileName.replace('.md', '');
+            // 生成用于显示的标题
+            const title = cleanName.replace(/-/g, ' ').toUpperCase();
+            
             const card = document.createElement('a');
             card.className = 'post-card';
-            card.href = `article.html?post=${fileName}`;
+            
+            // 修改链接地址：不再指向 article.html?post=...
+            // 而是配合 vercel.json 指向静态路径
+            card.href = `/posts/${cleanName}`; 
+            
             card.innerHTML = `
                 <div class="card-tag">// NODE_0${String(i + 1).padStart(2, '0')}</div>
                 <h2>${title}</h2>
@@ -111,7 +114,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 从 GitHub 抓取数据
     async function fetchPosts() {
         const container = document.getElementById('article-list');
         if(!container) return;
@@ -121,15 +123,15 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!res.ok) throw new Error("INDEX_LINK_FAILED");
             allPosts = await res.json(); 
             
-            renderPosts(allPosts, 'article-list');   // 渲染主列表
-            renderPosts(allPosts, 'search-results'); // 预渲染搜索列表
+            renderPosts(allPosts, 'article-list');
+            renderPosts(allPosts, 'search-results');
         } catch (e) {
             container.innerHTML = `<div class="loading">ERROR_LOG: ${e.message}</div>`;
         }
     }
     fetchPosts();
 
-    // --- 4. Canvas 背景引擎 (保持你原有的粒子与流体逻辑) ---
+    // --- 4. Canvas 背景引擎 (保持原样) ---
     const canvas = document.getElementById('hero-canvas');
     if (canvas) {
         const ctx = canvas.getContext('2d');
@@ -162,7 +164,6 @@ document.addEventListener('DOMContentLoaded', () => {
             ctx.fillStyle = isDark ? "rgba(5,5,5,0.15)" : "rgba(253,253,253,0.15)";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            // 绘制背景流体光影
             ctx.globalCompositeOperation = isDark ? "lighter" : "multiply";
             const flowColor = isDark ? "30, 35, 50" : "210, 220, 240";
             fluidNodes.forEach(node => {
@@ -176,7 +177,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 ctx.beginPath(); ctx.arc(node.x, node.y, node.size, 0, Math.PI*2); ctx.fill();
             });
 
-            // 绘制鼠标跟随粒子
             ctx.globalCompositeOperation = "source-over";
             particles.forEach((p, i) => {
                 p.x += p.vx; p.y += p.vy; p.life -= 0.02;
