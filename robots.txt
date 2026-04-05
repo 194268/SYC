@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://194268.github.io/SYC/sitemap.xml
