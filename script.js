@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- 【核心修改】渲染函数：适配对象数组 ---
+    // --- 【核心修改】渲染函数：按时间戳排序 ---
     function renderPosts(posts, targetId) {
         const container = document.getElementById(targetId);
         if (!container) return;
@@ -92,17 +92,25 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        posts.forEach((post, i) => {
-            // post 结构：{ fileName, title, url, date }
+        // 按时间戳降序排序（最新的在前）
+        const sortedPosts = [...posts].sort((a, b) => {
+            return (b.timestamp || 0) - (a.timestamp || 0);
+        });
+
+        sortedPosts.forEach((post, i) => {
+            // post 结构：{ fileName, title, url, date, time, timestamp }
             const card = document.createElement('a');
             card.className = 'post-card';
             
             // 直接使用 Python 脚本生成的 SEO 友好路径
             card.href = post.url; 
             
+            // 显示详细的日期和时间信息
+            const displayTime = post.time ? `${post.date} ${post.time}` : post.date;
+            
             card.innerHTML = `
                 <div class="card-tag">// NODE_${String(i + 1).padStart(2, '0')}</div>
-                <div class="post-date" style="font-size: 10px; font-family: 'Fira Code'; opacity: 0.5; margin-bottom: 5px;">${post.date}</div>
+                <div class="post-date" style="font-size: 10px; font-family: 'Fira Code'; opacity: 0.5; margin-bottom: 5px;">${displayTime}</div>
                 <h2>${post.title}</h2>
                 <div class="line-divider"></div>
                 <div style="font-size: 11px; font-family: 'Fira Code'; opacity: 0.6;">DECODE_DOCUMENT -></div>
@@ -122,7 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             allPosts = await res.json(); 
             
-            // 执行初始渲染
+            // 执行初始渲染（自动按时间排序）
             renderPosts(allPosts, 'article-list');
             renderPosts(allPosts, 'search-results');
         } catch (e) {
