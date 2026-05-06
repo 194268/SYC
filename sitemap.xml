@@ -16,6 +16,11 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://syc-sigma.vercel.app/p/HTB%20Survival%20of%20the%20Fittest%20Writeup</loc>
+    <lastmod>2026-05-06</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://syc-sigma.vercel.app/p/THB%20Like%20a%20Glove%20Writeup</loc>
     <lastmod>2026-05-06</lastmod>
     <priority>0.8</priority>
@@ -81,6 +86,11 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://syc-sigma.vercel.app/p/HTB%20CCTV%20writeup</loc>
+    <lastmod>2026-05-06</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://syc-sigma.vercel.app/p/HTB%20Kobold%20writeup</loc>
     <lastmod>2026-05-06</lastmod>
     <priority>0.8</priority>
@@ -96,7 +106,7 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://syc-sigma.vercel.app/p/HTB%20Survival%20of%20the%20Fittest%20Writeup</loc>
+    <loc>https://syc-sigma.vercel.app/p/HTB%20Ether%20Tag%20Writeup</loc>
     <lastmod>2026-05-06</lastmod>
     <priority>0.8</priority>
   </url>
@@ -121,6 +131,11 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://syc-sigma.vercel.app/p/HTB%20Flag%20Command%20Writeup</loc>
+    <lastmod>2026-05-06</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://syc-sigma.vercel.app/p/HTB%20Primed%20for%20Action%20Writeup</loc>
     <lastmod>2026-05-06</lastmod>
     <priority>0.8</priority>
@@ -136,12 +151,27 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://syc-sigma.vercel.app/p/HTB%20AI%20SPACE%20Writeup</loc>
+    <lastmod>2026-05-06</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://syc-sigma.vercel.app/p/HTB%20Outrun%20Writeup</loc>
     <lastmod>2026-05-06</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://syc-sigma.vercel.app/p/HTB%20Dusty%20Alleys%20Writeup</loc>
+    <lastmod>2026-05-06</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://syc-sigma.vercel.app/p/HTB%20Signals%20Writeup</loc>
+    <lastmod>2026-05-06</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://syc-sigma.vercel.app/p/HTB%20Cap%20writeup</loc>
     <lastmod>2026-05-06</lastmod>
     <priority>0.8</priority>
   </url>
@@ -156,52 +186,22 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://syc-sigma.vercel.app/p/HTB%20OpenSecret%20Writeup</loc>
-    <lastmod>2026-05-06</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://syc-sigma.vercel.app/p/HTB%20Nostalgia%20Writeup</loc>
-    <lastmod>2026-05-06</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://syc-sigma.vercel.app/p/HTB%20CCTV%20writeup</loc>
-    <lastmod>2026-05-06</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://syc-sigma.vercel.app/p/HTB%20Ether%20Tag%20Writeup</loc>
-    <lastmod>2026-05-06</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://syc-sigma.vercel.app/p/HTB%20Flag%20Command%20Writeup</loc>
-    <lastmod>2026-05-06</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://syc-sigma.vercel.app/p/HTB%20AI%20SPACE%20Writeup</loc>
-    <lastmod>2026-05-06</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://syc-sigma.vercel.app/p/HTB%20Dusty%20Alleys%20Writeup</loc>
-    <lastmod>2026-05-06</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://syc-sigma.vercel.app/p/HTB%20Cap%20writeup</loc>
-    <lastmod>2026-05-06</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://syc-sigma.vercel.app/p/HTB%20Fishy%20HTTP%20Writeup</loc>
     <lastmod>2026-05-06</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://syc-sigma.vercel.app/p/HTB%20OpenSecret%20Writeup</loc>
+    <lastmod>2026-05-06</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://syc-sigma.vercel.app/p/HTB%20Distract%20and%20Destroy%20Wtiteup</loc>
+    <lastmod>2026-05-06</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://syc-sigma.vercel.app/p/HTB%20Nostalgia%20Writeup</loc>
     <lastmod>2026-05-06</lastmod>
     <priority>0.8</priority>
   </url>
