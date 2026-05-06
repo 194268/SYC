@@ -48,6 +48,7 @@ jobs:
           git config --local user.name "github-actions[bot]"
           git add list.json sitemap.xml robots.txt .post_timestamps.json
           git commit -m "🤖 [AUTO] Update index: $(date +'%Y-%m-%d %H:%M:%S')"
+          git pull origin main --rebase
           git push origin main
       
       - name: ✅ Summary
