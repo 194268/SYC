@@ -8,17 +8,19 @@ on:
       - 'posts/**'
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   update-index:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     
     steps:
       - name: 📥 Checkout Code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
       
       - name: 🐍 Setup Python
         uses: actions/setup-python@v4
@@ -42,11 +44,11 @@ jobs:
       - name: 🔄 Auto Commit & Push
         if: steps.changes.outputs.changed == 'true'
         run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action Bot"
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
           git add list.json sitemap.xml robots.txt .post_timestamps.json
           git commit -m "🤖 [AUTO] Update index: $(date +'%Y-%m-%d %H:%M:%S')"
-          git push
+          git push origin main
       
       - name: ✅ Summary
         run: |
