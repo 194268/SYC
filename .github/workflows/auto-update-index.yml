@@ -6,32 +6,37 @@ on:
       - main
     paths:
       - 'posts/**'
+      - 'update_index.py'
+      - '.github/workflows/auto-update-index.yml'
   workflow_dispatch:
 
 permissions:
   contents: write
 
+concurrency:
+  group: auto-update-index-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   update-index:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: 📥 Checkout Code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
-      
+
       - name: 🐍 Setup Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      
+
       - name: ⚡ Run Index Generator
         run: |
-          cd ${{ github.workspace }}
           python update_index.py
-      
+
       - name: 📊 Check for Changes
         id: changes
         run: |
@@ -40,17 +45,20 @@ jobs:
           else
             echo "changed=true" >> $GITHUB_OUTPUT
           fi
-      
+
       - name: 🔄 Auto Commit & Push
         if: steps.changes.outputs.changed == 'true'
         run: |
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
+
           git add list.json sitemap.xml robots.txt .post_timestamps.json
+
           git commit -m "🤖 [AUTO] Update index: $(date +'%Y-%m-%d %H:%M:%S')"
+
           git pull origin main --rebase
           git push origin main
-      
+
       - name: ✅ Summary
         run: |
           echo "✅ Index update completed successfully!"
@@ -58,4 +66,4 @@ jobs:
           echo "  - list.json"
           echo "  - sitemap.xml"
           echo "  - robots.txt"
-          echo "  - .post_timestamps.json (cache)"
+          echo "  - .post_timestamps.json"
