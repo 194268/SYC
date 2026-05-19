@@ -6,6 +6,11 @@
     <priority>1.0</priority>
   </url>
   <url>
+    <loc>https://syc-sigma.vercel.app/p/HTB%20Like%20a%20Glove%20Writeup</loc>
+    <lastmod>2026-05-19</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://syc-sigma.vercel.app/p/THM%20Water%20Bottle%20Writeup</loc>
     <lastmod>2026-05-19</lastmod>
     <priority>0.8</priority>
@@ -237,11 +242,6 @@
   </url>
   <url>
     <loc>https://syc-sigma.vercel.app/p/HTB%20AI%20SPACE%20Writeup</loc>
-    <lastmod>2026-05-06</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://syc-sigma.vercel.app/p/THB%20Like%20a%20Glove%20Writeup</loc>
     <lastmod>2026-05-06</lastmod>
     <priority>0.8</priority>
   </url>
