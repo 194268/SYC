@@ -133,8 +133,6 @@ here is the right way
 
 first,
 
-![[Pasted image 20260519131744.png]]
-
 we got snaapped
 
 so, we found # CVE-2026-3888
@@ -143,7 +141,6 @@ but still not so sure
 
 so,
 
-![[Pasted image 20260519132021.png]]
 
 it means allow any unprivileged regular user to create isolated user namespaces.
  you will be a root when you execute something at a sandbox
@@ -154,26 +151,20 @@ After it deletes the /tmp/.snap directory used by Snap applications, an attacker
 
 When the Snap application starts again, the snap-confine program, which runs with root privileges, mistakenly trusts and uses this directory that has already been tampered with by the attacker, causing the malicious code to execute with root privileges.
  
- 
-![[Pasted image 20260519133510.png]]
 
 so add a new user and ssh 
 
-![[Pasted image 20260519133805.png]]
 
 use 
 
 gcc -nostdlib -static -Wl,--entry=start -o librootshell.so librootshell.c
 
-![[Pasted image 20260519134348.png]]
 
 than,wget it and run， we got it.
 
-![[Pasted image 20260519135327.png]]
-
-
-![[Pasted image 20260519135644.png]]
-
-![[Pasted image 20260519140045.png]]
 
 remember change the code it works.
+
+
+
+tips:beacuse of my fault, the pictures disappeared.😥😥😥
