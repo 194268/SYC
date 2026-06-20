@@ -2,8 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://syc-sigma.vercel.app/</loc>
-    <lastmod>2026-06-19</lastmod>
+    <lastmod>2026-06-20</lastmod>
     <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://syc-sigma.vercel.app/p/THB%20WebVault%20Time%20Machine%20Investigation%20Writeup</loc>
+    <lastmod>2026-06-20</lastmod>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://syc-sigma.vercel.app/p/HTB%20Follow%20The%20Money%20Writeup</loc>
