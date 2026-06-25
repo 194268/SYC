@@ -2,8 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://syc-sigma.vercel.app/</loc>
-    <lastmod>2026-06-24</lastmod>
+    <lastmod>2026-06-25</lastmod>
     <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://syc-sigma.vercel.app/p/HTB%20Lost%20in%20Hyperspace%20Writeup</loc>
+    <lastmod>2026-06-25</lastmod>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://syc-sigma.vercel.app/p/HTB%20Prometheon%20Writeup</loc>
