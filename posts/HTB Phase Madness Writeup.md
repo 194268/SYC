@@ -40,15 +40,10 @@ Here i asked ai for all the help
 > import math  
 > import json  
 > import re  
-> from pwn import * # 确保你已安装 pwntools: pip install pwntools
-
-> # ==================== 远程靶机配置 ====================  
+> from pwn import * 
 > REMOTE_IP = “154.57.164.70”   
 > REMOTE_PORT = 31113  
-> # ======================================================
-
 > def solve_char(p0):  
->  “””根据观测到 0 的概率 p0，计算对应的 ASCII 字符”””  
 >  cos_theta = 2 * p0–1  
 >  # 限制范围防止统计涨落（Shots = 100,000 偶有微小偏差）导致 math.acos 报错  
 >  cos_theta = max(-1.0, min(1.0, cos_theta))  
