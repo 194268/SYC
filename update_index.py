@@ -71,7 +71,7 @@ def generate_site_assets():
     POSTS_DIR = "posts"
     BASE_URL = "https://syc-sigma.vercel.app"
     LIST_FILE = "list.json"
-    SITEMAP_FILE = "sitemap.xml"
+    SITEMAP_FILE = "sitemap1.xml"
     ROBOTS_FILE = "robots.txt"
     ROUTE_PREFIX = "p"
     TIME_CACHE_FILE = ".post_timestamps.json"
