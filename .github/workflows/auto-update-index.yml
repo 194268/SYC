@@ -52,7 +52,7 @@ jobs:
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
 
-          git add list.json sitemap.xml robots.txt .post_timestamps.json
+          git add list.json sitemap1.xml robots.txt .post_timestamps.json
 
           git commit -m "🤖 [AUTO] Update index: $(date +'%Y-%m-%d %H:%M:%S')"
 
